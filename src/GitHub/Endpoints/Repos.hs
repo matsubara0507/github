@@ -138,6 +138,6 @@ branchesForR user repo =
 
 -- | Delete a repository,.
 -- See <https://developer.github.com/v3/repos/#delete-a-repository>
-deleteRepoR :: Name Owner -> Name Repo -> GenRequest 'MtUnit 'RW ()
+deleteRepoR :: Name Owner -> Name Repo -> GenRequest 'MtStatus 'RW ()
 deleteRepoR user repo =
     Command Delete ["repos", toPathPart user, toPathPart repo] mempty

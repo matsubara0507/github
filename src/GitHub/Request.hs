@@ -401,6 +401,11 @@ type StatusMap a = [(Int, a)]
 class HasStatusMap a where
     statusMap :: StatusMap a
 
+instance HasStatusMap () where
+    statusMap =
+        [ (204, ())
+        ]
+
 instance HasStatusMap Bool where
     statusMap =
         [ (204, True)
