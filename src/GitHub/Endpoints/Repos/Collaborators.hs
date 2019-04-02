@@ -78,6 +78,6 @@ addCollaboratorR
     :: Name Owner        -- ^ Repository owner
     -> Name Repo         -- ^ Repository name
     -> Name User         -- ^ Collaborator to add
-    -> GenRequest 'MtUnit 'RW ()
+    -> GenRequest 'MtStatus 'RW ()
 addCollaboratorR owner repo coll =
     Command Put ["repos", toPathPart owner, toPathPart repo, "collaborators", toPathPart coll] mempty
