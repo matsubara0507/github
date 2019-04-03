@@ -404,6 +404,8 @@ class HasStatusMap a where
 instance HasStatusMap () where
     statusMap =
         [ (204, ())
+        , (200, ())
+        , (201, ())
         ]
 
 instance HasStatusMap Bool where
