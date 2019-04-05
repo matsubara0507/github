@@ -13,6 +13,8 @@ module GitHub.Endpoints.Repos.Collaborators (
     isCollaboratorOnR,
     addCollaborator,
     addCollaboratorR,
+    removeCollaborator,
+    removeCollaboratorR,
     module GitHub.Data,
     ) where
 
@@ -81,3 +83,22 @@ addCollaboratorR
     -> GenRequest 'MtStatus 'RW ()
 addCollaboratorR owner repo coll =
     Command Put ["repos", toPathPart owner, toPathPart repo, "collaborators", toPathPart coll] mempty
+
+removeCollaborator
+    :: Auth
+    -> Name Owner        -- ^ Repository owner
+    -> Name Repo         -- ^ Repository name
+    -> Name User         -- ^ Collaborator to remove
+    -> IO (Either Error ())
+removeCollaborator auth owner repo coll =
+    executeRequest auth $ removeCollaboratorR owner repo coll
+
+-- | Kick a user from a collaborator.
+-- See <https://developer.github.com/v3/repos/collaborators/#remove-user-as-a-collaborator>
+removeCollaboratorR
+    :: Name Owner        -- ^ Repository owner
+    -> Name Repo         -- ^ Repository name
+    -> Name User         -- ^ Collaborator to add
+    -> GenRequest 'MtStatus 'RW ()
+removeCollaboratorR owner repo coll =
+    Command Delete ["repos", toPathPart owner, toPathPart repo, "collaborators", toPathPart coll] mempty
