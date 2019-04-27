@@ -10,6 +10,10 @@ module GitHub.Endpoints.Organizations.Members (
     membersOfWithR,
     isMemberOfR,
     orgInvitationsR,
+    addOrUpdateMembership',
+    addOrUpdateMembershipR,
+    removeMembership',
+    removeMembershipR,
     module GitHub.Data,
     ) where
 
@@ -51,3 +55,27 @@ isMemberOfR user org =
 -- See <https://developer.github.com/v3/orgs/members/#list-pending-organization-invitations>
 orgInvitationsR :: Name Organization -> FetchCount -> Request 'RA (Vector Invitation)
 orgInvitationsR org = pagedQuery ["orgs", toPathPart org, "invitations"] []
+
+-- | Add or update organization membership
+--
+-- See <https://developer.github.com/v3/orgs/members/#add-or-update-organization-membership>
+addOrUpdateMembership' :: Auth -> Name Organization -> Name User -> Bool -> IO (Either Error ())
+addOrUpdateMembership' auth org user isAdmin =
+    executeRequest auth $ addOrUpdateMembershipR org user isAdmin
+
+addOrUpdateMembershipR :: Name Organization -> Name User -> Bool -> GenRequest 'MtStatus 'RW ()
+addOrUpdateMembershipR org user isAdmin =
+    Command Put path (if isAdmin then encode adminRole else mempty)
+  where
+    path = ["org", toPathPart org, "memberships", toPathPart user]
+    adminRole = object ["role" .= ("admin" :: String)]
+
+-- | Remove organization membership
+--
+-- See <https://developer.github.com/v3/orgs/members/#remove-organization-membership>
+removeMembership' :: Auth -> Name Organization -> Name User -> IO (Either Error ())
+removeMembership' auth org user = executeRequest auth $ removeMembershipR org user
+
+removeMembershipR :: Name Organization -> Name User -> GenRequest 'MtStatus 'RW ()
+removeMembershipR org user =
+    Command Delete ["org", toPathPart org, "memberships", toPathPart user] mempty
