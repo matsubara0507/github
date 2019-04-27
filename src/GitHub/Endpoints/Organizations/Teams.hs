@@ -8,6 +8,8 @@
 module GitHub.Endpoints.Organizations.Teams (
     teamsOfR,
     teamInfoForR,
+    teamInfoByNameR,
+    createTeamFor',
     createTeamForR,
     editTeamR,
     deleteTeamR,
@@ -36,6 +38,12 @@ teamsOfR org =
 teamInfoForR  :: Id Team -> Request k Team
 teamInfoForR tid =
     query ["teams", toPathPart tid] []
+
+-- | Get team by name
+-- See <https://developer.github.com/v3/teams/#get-team-by-name>
+teamInfoByNameR :: Name Organization -> Name Team -> Request k Team
+teamInfoByNameR org name =
+    query ["orgs", toPathPart org, "teams", toPathPart name] []
 
 -- | Create team.
 -- See <https://developer.github.com/v3/orgs/teams/#create-team>
