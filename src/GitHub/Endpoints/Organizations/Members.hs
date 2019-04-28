@@ -67,7 +67,7 @@ addOrUpdateMembershipR :: Name Organization -> Name User -> Bool -> GenRequest '
 addOrUpdateMembershipR org user isAdmin =
     Command Put path (if isAdmin then encode adminRole else mempty)
   where
-    path = ["org", toPathPart org, "memberships", toPathPart user]
+    path = ["orgs", toPathPart org, "memberships", toPathPart user]
     adminRole = object ["role" .= ("admin" :: String)]
 
 -- | Remove organization membership
@@ -78,4 +78,4 @@ removeMembership' auth org user = executeRequest auth $ removeMembershipR org us
 
 removeMembershipR :: Name Organization -> Name User -> GenRequest 'MtStatus 'RW ()
 removeMembershipR org user =
-    Command Delete ["org", toPathPart org, "memberships", toPathPart user] mempty
+    Command Delete ["orgs", toPathPart org, "memberships", toPathPart user] mempty
