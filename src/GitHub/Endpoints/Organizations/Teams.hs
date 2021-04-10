@@ -9,7 +9,6 @@ module GitHub.Endpoints.Organizations.Teams (
     teamsOfR,
     teamInfoForR,
     teamInfoByNameR,
-    createTeamFor',
     createTeamForR,
     editTeamR,
     deleteTeamR,
